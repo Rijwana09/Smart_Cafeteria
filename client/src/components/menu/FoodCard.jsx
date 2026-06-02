@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { useCart } from "../../context/CartContext";
 
 function FoodCard({ food }) {
+    const { addToCart } = useCart();
   return (
+
     <motion.div
       whileHover={{ scale: 1.03 }}
       className="bg-white rounded-2xl shadow-lg overflow-hidden"
@@ -27,6 +30,7 @@ function FoodCard({ food }) {
         </p>
 
         <button
+           onClick={() => addToCart(food)}
           className="
           mt-4
           w-full
