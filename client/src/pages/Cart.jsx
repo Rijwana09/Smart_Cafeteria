@@ -6,9 +6,8 @@ import { useCart } from "../context/CartContext";
 
 function Cart() {
 
-  const {
-    cartItems,
-    clearCart,
+  const { cartItems,
+    clearCart, grandTotal
   } = useCart();
 
   const subtotal =
@@ -24,6 +23,8 @@ function Cart() {
 
   const total =
     subtotal + tax;
+
+  // const {subtotal, tax, grandTotal } = useCart();
 
   if (cartItems.length === 0) {
     return <EmptyCart />;
@@ -63,18 +64,19 @@ function Cart() {
         >
           {cartItems.map((item) => (
             <CartItem
-              key={item.id}
+              key={item._id}  // add unders
               item={item}
             />
           ))}
         </div>
 
-        <CartSummary
+        <CartSummary 
           subtotal={subtotal}
           tax={tax}
-          total={total}
+          total={grandTotal}
           clearCart={clearCart}
         />
+
       </div>
     </div>
   );

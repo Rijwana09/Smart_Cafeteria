@@ -1,29 +1,61 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {
+export const CartProvider = ({
+  children,
+}) => {
 
-  const [cartItems, setCartItems] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
 
-  const addToCart = (food) => {
+    const storedCart =
+      localStorage.getItem("cartItems");
 
-    const existingItem = cartItems.find(
-      (item) => item.id === food.id
+    return storedCart ? JSON.parse(storedCart): [];
+
+  });
+
+  useEffect(() => {
+
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(cartItems)
     );
 
+  }, [cartItems]);
+
+  // Add Item
+  const addToCart = (food) => {
+
+    const existingItem =
+      cartItems.find(
+        (item) =>
+          item._id === food._id
+      );
+
     if (existingItem) {
+
       setCartItems(
         cartItems.map((item) =>
-          item.id === food.id
+          item._id === food._id
             ? {
                 ...item,
-                quantity: item.quantity + 1,
+                quantity:
+                  item.quantity + 1,
               }
             : item
         )
       );
+
     } else {
+
       setCartItems([
         ...cartItems,
         {
@@ -31,59 +63,191 @@ export const CartProvider = ({ children }) => {
           quantity: 1,
         },
       ]);
+
+      // setCartItems((prevItems) => [
+      //   ...prevItems,
+      //   newItem,
+      // ]);
+
     }
   };
 
-  const increaseQuantity = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id
+  // Increase Quantity
+  const increaseQuantity = (
+    foodId
+  ) => {
+
+    // setCartItems(
+    //   cartItems.map((item) =>
+    //     item._id === foodId
+    //       ? {
+    //           ...item,
+    //           quantity:
+    //             item.quantity + 1,
+    //         }
+    //       : item
+    //   )
+    // ); 
+
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === foodId
           ? {
               ...item,
-              quantity: item.quantity + 1,
+              quantity:
+                item.quantity + 1,
             }
           : item
       )
     );
   };
 
-  const decreaseQuantity = (id) => {
-    setCartItems(
-      cartItems
+  
+  
+
+
+  // Decrease Quantity
+  const decreaseQuantity = (
+    foodId
+  ) => {
+
+    setCartItems((prevItems) =>
+      prevItems
         .map((item) =>
-          item.id === id
+          item._id === foodId
             ? {
                 ...item,
-                quantity: item.quantity - 1,
+                quantity:
+                  item.quantity - 1,
               }
             : item
         )
-        .filter((item) => item.quantity > 0)
+        .filter(
+          (item) =>
+            item.quantity > 0
+        )
     );
+
+
+    // setCartItems(
+    //   cartItems
+    //     .map((item) =>
+    //       item._id === foodId
+    //         ? {
+    //             ...item,
+    //             quantity:
+    //               item.quantity - 1,
+    //           }
+    //         : item
+    //     )
+    //     .filter(
+    //       (item) =>
+    //         item.quantity > 0
+    //     )
+    // );
   };
 
-  const removeItem = (id) => {
-    setCartItems(
-      cartItems.filter(
-        (item) => item.id !== id
-      )
-    );
+  
+
+
+  // Remove Item
+  const removeItem = (
+    foodId
+  ) => {
+
+
+    setCartItems((prevItems) =>
+    prevItems.filter(
+      (item) =>
+        item._id !== foodId
+    )
+  );
+    // setCartItems(
+    //   cartItems.filter(
+    //     (item) =>
+    //       item._id !== foodId
+    //   )
+    // );
+
   };
 
+  
+
+  // Clear Cart
   const clearCart = () => {
+
     setCartItems([]);
+
+  };
+
+  // Total Quantity
+  const totalItems =
+    useMemo(() => {
+
+      return cartItems.reduce(
+        (total, item) =>
+          total + item.quantity,
+        0
+      );
+
+    }, [cartItems]);
+
+  // Subtotal
+  const subtotal =
+    useMemo(() => {
+
+      return cartItems.reduce(
+        (total, item) =>
+          total +
+          item.price *
+            item.quantity,
+        0
+      );
+
+    }, [cartItems]);
+
+  //Tax and Grand
+  const tax = useMemo(() => {
+
+    return Math.round(
+      subtotal * 0.05
+    );
+
+  }, [subtotal]);
+
+  const grandTotal = useMemo(() => {
+
+    return subtotal + tax;
+
+    }, [subtotal, tax]);
+
+
+  const value = {
+
+    cartItems,
+
+    addToCart,
+
+    increaseQuantity,
+
+    decreaseQuantity,
+
+    removeItem,
+
+    clearCart,
+
+    totalItems,
+
+    subtotal,
+
+    tax,
+
+    grandTotal
   };
 
   return (
     <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        increaseQuantity,
-        decreaseQuantity,
-        removeItem,
-        clearCart,
-      }}
+      value={value}
     >
       {children}
     </CartContext.Provider>

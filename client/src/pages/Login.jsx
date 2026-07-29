@@ -15,17 +15,14 @@ import {
   loginUser,
 } from "../services/authService";
 
-import {
-  useAuth,
-} from "../context/AuthContext";
+import {useAuth} from "../context/AuthContext";
 
 function Login() {
 
   const navigate =
     useNavigate();
 
-  const { login } =
-    useAuth();
+  const { login } = useAuth();
 
   const [email, setEmail] =
     useState("");

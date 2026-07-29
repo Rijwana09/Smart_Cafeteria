@@ -5,10 +5,42 @@ function FoodCard({ food }) {
     const { addToCart } = useCart();
   return (
 
+    
+
     <motion.div
       whileHover={{ scale: 1.03 }}
       className="bg-white rounded-2xl shadow-lg overflow-hidden"
     >
+
+      <div className="mt-2">
+      {food.stock > 0 ? (
+        <span
+          className="
+          bg-green-100
+          text-green-600
+          px-2
+          py-1
+          rounded
+          text-sm
+          "
+        >
+          In Stock
+        </span>
+      ) : (
+        <span
+          className="
+          bg-red-100
+          text-red-600
+          px-2
+          py-1
+          rounded
+          text-sm
+          "
+        >
+          Out Of Stock
+        </span>
+      )}
+    </div>
       <img
         src={food.image}
         alt={food.name}

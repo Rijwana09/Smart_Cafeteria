@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MenuHeader from "../components/menu/MenuHeader";
 import SearchBar from "../components/menu/SearchBar";
 import CategoryFilter from "../components/menu/CategoryFilter";
 import FoodGrid from "../components/menu/FoodGrid";
 
-import foodsData from "../data/foods";
+import { getAllFoods } from "../services/foodService";
+
+import Loading from "../components/common/Loading";
+
+import Error from "../components/common/Error";
 
 function Menu() {
   const [search, setSearch] =
@@ -19,27 +23,71 @@ function Menu() {
   const [sortBy, setSortBy] =
     useState("");
 
+
+  const [foods, setFoods] =
+  useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  useEffect(() => {
+
+  const fetchFoods =
+    async () => {
+
+      try {
+
+        setLoading(true);
+
+        const data =
+          await getAllFoods();
+
+        setFoods(data);
+
+      } catch (err) {
+
+        setError(
+          err.response?.data
+            ?.message ||
+            "Failed to fetch foods"
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    };
+
+  fetchFoods();
+
+}, []);
+
+
   let filteredFoods =
-    foodsData.filter((food) => {
+  foods.filter((food) => {
 
-      const matchesSearch =
-        food.name
-          .toLowerCase()
-          .includes(
-            search.toLowerCase()
-          );
-
-      const matchesCategory =
-        selectedCategory === "All"
-          ? true
-          : food.category ===
-            selectedCategory;
-
-      return (
-        matchesSearch &&
-        matchesCategory
+  const matchesSearch =
+    food.name
+      .toLowerCase()
+      .includes(
+        search.toLowerCase()
       );
-    });
+
+  const matchesCategory =
+    selectedCategory === "All"
+      ? true
+      : food.category ===
+        selectedCategory;
+
+  return (
+    matchesSearch &&
+    matchesCategory
+  );
+});
 
   if (sortBy === "low") {
     filteredFoods.sort(
@@ -50,6 +98,18 @@ function Menu() {
   if (sortBy === "high") {
     filteredFoods.sort(
       (a, b) => b.price - a.price
+    );
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto p-6">
+        <Error message={error} />
+      </div>
     );
   }
 
