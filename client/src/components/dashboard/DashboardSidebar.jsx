@@ -23,12 +23,18 @@ function DashboardSidebar() {
           Overview
         </Link>
 
-        <Link
-          to="/orders"
-          className="block hover:text-amber-500"
-        >
-          My Orders
-        </Link>
+    <Link
+      to="/my-orders"
+      className="
+      bg-amber-500
+      text-white
+      px-5
+      py-3
+      rounded-lg
+      "
+    >
+      My Orders
+    </Link>
 
         <Link
           to="/favorites"

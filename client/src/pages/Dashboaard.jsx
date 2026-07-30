@@ -6,7 +6,7 @@ import StatsCards from "../components/dashboard/StatsCards";
 import RecentOrders from "../components/dashboard/RecentOrders";
 import FavoriteFoods from "../components/dashboard/FavoriteFoods";
 import AccountSettings from "../components/dashboard/AccountSettings";
-
+import AdminDashboard from "./AdminDashboard";
 function Dashboard() {
   return (
     <div
@@ -52,6 +52,8 @@ function Dashboard() {
           <AccountSettings />
         </motion.div>
       </div>
+
+      <AdminDashboard/>
     </div>
   );
 }

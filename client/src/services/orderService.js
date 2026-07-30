@@ -17,11 +17,22 @@ export const createOrder = async (
   return response.data;
 };
 
-export const getMyOrders = async (
+export const getMyOrders = async (token) => {
+  const response = await api.get("/orders/my-orders", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
+export const getOrderById = async (
+  id,
   token
 ) => {
   const response = await api.get(
-    "/orders/my-orders",
+    `/orders/${id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

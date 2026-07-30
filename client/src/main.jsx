@@ -15,6 +15,17 @@ import {
   AuthProvider,
 } from "./context/AuthContext";
 
+
+import { Toaster } from "react-hot-toast";
+
+//yaha se samjh nhi
+// import toast from "react-hot-toast";
+
+// toast.success("Order status updated");
+
+// toast.error("Failed to update order");
+//jab eeror ya message print karna hoga tab ye use karna h. hmm lakin import paste kis page main krna h yahi samjh ke bahar h yahi pr kr diye alert bol ke kuch nhi dikh rha h 
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
@@ -22,6 +33,10 @@ ReactDOM.createRoot(
   <AuthProvider>
     <CartProvider>
       <App />
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
     </CartProvider>
     </AuthProvider>
   </BrowserRouter>

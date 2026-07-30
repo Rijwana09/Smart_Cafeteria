@@ -1,7 +1,9 @@
-import AdminDashboard from "../pages/AdminDashboard"
+import AdminDashboard from "../pages/AdminDashboard";
+import AdminOrders from "../pages/AdminOrders";
 
 function ProtectedRoutes() {
   return (
+    <Routes>
         <Route
         path="/admin"
         element={
@@ -10,6 +12,17 @@ function ProtectedRoutes() {
             </AdminRoute>
         }
         />
+        <Route
+            path="/admin/orders"
+            element={
+                <AdminRoute>
+                <AdminOrders />
+                </AdminRoute>
+            }
+            />
+        </Routes>
+        
+        
     );
 }
 

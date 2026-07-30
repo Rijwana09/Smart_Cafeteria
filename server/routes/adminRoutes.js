@@ -23,4 +23,39 @@ router.get(
     }
 );
 
+const {
+  getAllOrders,
+  getOrderDetails,
+  updateOrderStatus,
+  getDashboardStats,
+} = require(
+  "../controllers/adminController"
+);
+
+router.use(
+  protect,
+  authorizeRoles("admin")
+);
+
+router.get(
+  "/orders",
+  getAllOrders
+);
+
+router.get(
+  "/orders/:id",
+  getOrderDetails
+);
+
+router.patch(
+  "/orders/:id/status",
+  updateOrderStatus
+);
+
+router.get(
+  "/dashboard-stats",
+  getDashboardStats
+);
+
+
 module.exports = router;

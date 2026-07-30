@@ -6,6 +6,7 @@ import OrderSummary from "../components/checkout/OrderSummary";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { createOrder } from "../services/orderService";
+import toast from "react-hot-toast";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -86,11 +87,12 @@ function Checkout() {
         "/order-success"
       );
     } catch (error) {
-      alert(
-        error.response?.data
-          ?.message ||
-          "Failed to place order"
-      );
+      // alert(
+      //   error.response?.data
+      //     ?.message ||
+      //     "Failed to place order"
+      // );
+      toast.error( "Failed to place order")
     } finally {
       setLoading(false);
     }

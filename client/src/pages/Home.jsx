@@ -8,7 +8,8 @@ import WhyChooseUs from "../components/home/WhyChooseUs";
 import Statistics from "../components/home/Statistics";
 import Testimonials from "../components/home/Testimonials";
 import CTA from "../components/home/CTA";
-
+//test
+import toast from "react-hot-toast";
 function Home() {
   return (
     <>
@@ -16,6 +17,7 @@ function Home() {
 
       <main>
         <Hero />
+        {/* {toast.success("Order status updated")} */}
         <Categories />
         <FeaturedFoods />
         <WhyChooseUs />
