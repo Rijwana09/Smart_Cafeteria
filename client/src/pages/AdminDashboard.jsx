@@ -10,13 +10,7 @@ import InventoryTable from "../components/admin/InventoryTable";
 function AdminDashboard() {
 
   return (
-    <div
-      className="
-      min-h-screen
-      bg-gray-100
-      p-6
-      "
-    >
+    <div className="min-h-screen bg-gray-100 p-6">
       <div
         className="
         max-w-7xl

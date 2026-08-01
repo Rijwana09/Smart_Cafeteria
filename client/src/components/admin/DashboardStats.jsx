@@ -1,28 +1,31 @@
-import Skeleton from
-"react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 // import { CSVLink }
 // from "react-csv";
-
+import StatCard from "./StatCard";
 import { useState } from "react";
 
 function DashboardStats() {
 
   const stats = [
     {
+      id: 1,
       title: "Total Orders",
-      value: "1,245",
+      value: 1245
     },
     {
+      id: 2,
       title: "Revenue",
-      value: "₹1,85,000",
+      value: 185000
     },
     {
+      id: 3,
       title: "Users",
-      value: "532",
+      value: 532
     },
     {
+      id: 4,
       title: "Foods",
-      value: "84",
+      value: 84
     },
   ];
 
@@ -34,11 +37,11 @@ function DashboardStats() {
 
   const indexOfFirst = indexOfLast - ordersPerPage;
 
-  const currentOrders =
-    filteredOrders.slice(
-    indexOfFirst,
-    indexOfLast
-    );
+  // const currentOrders =
+  //   filteredOrders.slice(
+  //   indexOfFirst,
+  //   indexOfLast
+  //   );
 
   return (
     <div
@@ -50,29 +53,17 @@ function DashboardStats() {
       "
     >
 
-      <div className="grid md:grid-cols-4 gap-6 mb-8">
+      {/* <div className="grid md:grid-cols-4 gap-6 mb-8">
 
-            <StatCard
-                title="Orders"
-                value={stats.totalOrders}
+           {/* {stats.map(stat => 
+             <StatCard
+                key={stat.id}
+                title={stat.title}
+                value={stat.value}
             />
+           )} 
 
-            <StatCard
-                title="Revenue"
-                value={`₹${stats.totalRevenue}`}
-            />
-
-            <StatCard
-                title="Users"
-                value={stats.totalUsers}
-            />
-
-            <StatCard
-                title="Foods"
-                value={stats.totalFoods}
-            />
-
-        </div>
+        </div> */}
 
       {stats.map((item) => (
         <div
@@ -100,27 +91,6 @@ function DashboardStats() {
         </div>
       ))}
 
-
-      <Skeleton height={60} count={8}/>
-
-      <select>
-
-<option>Today</option>
-
-<option>Last 7 Days</option>
-
-<option>This Month</option>
-
-</select>
-
-{/* <CSVLink
-data={filteredOrders}
-filename="orders.csv"
->
-
-Export Orders
-
-</CSVLink> */}
     </div>
 
     

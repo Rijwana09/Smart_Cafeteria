@@ -11,7 +11,7 @@ import Checkout from "../pages/checkout";
 import OrderSuccess from "../pages/OrderSuccess";
 import MyOrders from "../pages/MyOrders";
 import OrderDetails from "../pages/OrderDetails";
-// import AdminOrders from "../pages/AdminOrders";
+import AdminOrders from "../pages/AdminOrders";
 
 
 
@@ -29,7 +29,7 @@ function AppRoutes() {
       <Route path="/order-success" element={<OrderSuccess />}/>
       <Route path="/my-orders" element={<MyOrders />}/>
       <Route path="/orders/:id" element={<OrderDetails />}/>
-      {/* <Route path="/admin/orders" element={<AdminRoute><AdminOrders /></AdminRoute>}/> */}
+      <Route path="/admin/orders" element={<AdminOrders />} />
     </Routes>
   );
 }
