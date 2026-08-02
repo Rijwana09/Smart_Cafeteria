@@ -12,7 +12,7 @@ import OrderSuccess from "../pages/OrderSuccess";
 import MyOrders from "../pages/MyOrders";
 import OrderDetails from "../pages/OrderDetails";
 import AdminOrders from "../pages/AdminOrders";
-
+import AdminLogin from "../pages/AdminLogin";
 
 
 function AppRoutes() {
@@ -22,9 +22,10 @@ function AppRoutes() {
       <Route path="/menu" element={<Menu />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/admin-login" element={<AdminLogin />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />}/>
-      <Route path="/test-admin" element={<AdminDashboard />}/> {/* ye abhi test karne ke liye yeh per add kiye h */}
+      <Route path="/test-admin" element={<AdminDashboard />}/> ye abhi test karne ke liye yeh per add kiye h
       <Route path="/checkout" element={<Checkout />}/>
       <Route path="/order-success" element={<OrderSuccess />}/>
       <Route path="/my-orders" element={<MyOrders />}/>
