@@ -1,21 +1,14 @@
-const categories = [
-  "All",
-  "Burger",
-  "Pizza",
-  "Biryani",
-  "Drinks",
-  "Snacks",
-  "Dessert",
-];
-
 function CategoryFilter({
+  categories,
   selectedCategory,
   setSelectedCategory,
 }) {
+  const list = ["All", ...(categories || [])];
+
   return (
     <div className="flex flex-wrap gap-3">
 
-      {categories.map((category) => (
+      {list.map((category) => (
         <button
           key={category}
           onClick={() =>

@@ -42,3 +42,20 @@ export const getOrderById = async (
 
   return response.data;
 };
+
+export const cancelOrder = async (
+  id,
+  token
+) => {
+  const response = await api.patch(
+    `/orders/${id}/cancel`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};

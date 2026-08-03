@@ -3,16 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
-// import { adminLogin } from "../../services/adminAuthService";
-// import { useAdminAuth } from "../../context/AdminAuthContext";
-
-import {loginUser} from "../services/authService";
+import { adminLogin } from "../services/adminAuthService";
 
 import {useAuth} from "../context/AuthContext";
 function AdminLogin() {
   const navigate = useNavigate();
 
-  const { setAdmin } = useAuth();
+  const { login } = useAuth();
 
   
 
@@ -42,17 +39,18 @@ function AdminLogin() {
     try {
       setLoading(true);
 
-      const data = await loginUser(formData);
+      const data = await adminLogin(
+        formData.email,
+        formData.password
+      );
 
-    //   alert(data)
-
-      setAdmin(data);
+      login(data);
 
       toast.success(
         "Admin Login Successful"
       );
 
-      navigate("/test-admin");
+      navigate("/admin");
 
     } catch (error) {
 

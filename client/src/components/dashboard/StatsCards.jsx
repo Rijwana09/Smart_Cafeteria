@@ -1,22 +1,55 @@
-function StatsCards() {
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { getMyOrders } from "../../services/orderService";
 
-  const stats = [
-    {
-      title: "Total Orders",
-      value: 24,
-    },
-    {
-      title: "Completed",
-      value: 20,
-    },
-    {
-      title: "Pending",
-      value: 4,
-    },
-    {
-      title: "Spent",
-      value: "₹4,520",
-    },
+function StatsCards() {
+  const { user } = useAuth();
+
+  const [stats, setStats] = useState({
+    total: 0,
+    completed: 0,
+    pending: 0,
+    spent: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const orders = await getMyOrders(user.token);
+
+        const completed = orders.filter(
+          (o) => o.orderStatus === "Delivered"
+        ).length;
+
+        const pending = orders.filter(
+          (o) => !["Delivered", "Cancelled"].includes(o.orderStatus)
+        ).length;
+
+        const spent = orders
+          .filter((o) => o.orderStatus !== "Cancelled")
+          .reduce((sum, o) => sum + o.totalAmount, 0);
+
+        setStats({
+          total: orders.length,
+          completed,
+          pending,
+          spent,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, [user.token]);
+
+  const cards = [
+    { title: "Total Orders", value: stats.total },
+    { title: "Completed", value: stats.completed },
+    { title: "Pending", value: stats.pending },
+    { title: "Spent", value: `₹${stats.spent}` },
   ];
 
   return (
@@ -28,7 +61,7 @@ function StatsCards() {
       gap-6
       "
     >
-      {stats.map((item) => (
+      {cards.map((item) => (
         <div
           key={item.title}
           className="
@@ -49,7 +82,7 @@ function StatsCards() {
             mt-2
             "
           >
-            {item.value}
+            {loading ? "—" : item.value}
           </p>
         </div>
       ))}

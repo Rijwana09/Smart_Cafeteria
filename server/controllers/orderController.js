@@ -133,8 +133,54 @@ const getOrderById = async (
 };
 
 
+//Cancel Order (logged-in user, own order only)
+const cancelOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found.",
+      });
+    }
+
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        message: "You can only cancel your own orders.",
+      });
+    }
+
+    if (["Delivered", "Cancelled"].includes(order.orderStatus)) {
+      return res.status(400).json({
+        message: `Order already ${order.orderStatus.toLowerCase()} and cannot be cancelled.`,
+      });
+    }
+
+    order.orderStatus = "Cancelled";
+    await order.save();
+
+    // Restock items
+    for (const item of order.orderItems) {
+      await Food.findByIdAndUpdate(item.food, {
+        $inc: { stock: item.quantity },
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order cancelled.",
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createOrder,
   getMyOrders,
   getOrderById,
+  cancelOrder,
 };

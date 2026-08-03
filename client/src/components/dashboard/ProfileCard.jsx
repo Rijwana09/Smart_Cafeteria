@@ -1,8 +1,7 @@
+import { useAuth } from "../../context/AuthContext";
+
 function ProfileCard() {
-  const user =
-    JSON.parse(
-      localStorage.getItem("user")
-    ) || {};
+  const { user } = useAuth();
 
   return (
     <div

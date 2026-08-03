@@ -24,6 +24,20 @@ const userSchema = new mongoose.Schema(
         default: "customer",
     },
 
+    favorites: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Food",
+        },
+    ],
+
+    resetPasswordToken: {
+        type: String,
+    },
+
+    resetPasswordExpire: {
+        type: Date,
+    },
 
 },
 {

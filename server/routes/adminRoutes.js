@@ -5,7 +5,7 @@ const router = express.Router();
 const { protect,} = require("../middleware/authMiddleware");
 
 const authorizeRoles = require("../middleware/roleMiddleware");
-const { getAllOrders, getOrderDetails, updateOrderStatus, getDashboardStats,
+const { getAllOrders, getOrderDetails, updateOrderStatus, getDashboardStats, getAllUsers, getPopularFoods, getRevenueChart, updateUserRole, deleteUser,
 } = require(
   "../controllers/adminController"
 );
@@ -48,6 +48,31 @@ router.patch(
 router.get(
   "/dashboard-stats",
   getDashboardStats
+);
+
+router.get(
+  "/users",
+  getAllUsers
+);
+
+router.put(
+  "/users/:id/role",
+  updateUserRole
+);
+
+router.delete(
+  "/users/:id",
+  deleteUser
+);
+
+router.get(
+  "/popular-foods",
+  getPopularFoods
+);
+
+router.get(
+  "/revenue-chart",
+  getRevenueChart
 );
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import MenuHeader from "../components/menu/MenuHeader";
 import SearchBar from "../components/menu/SearchBar";
@@ -11,95 +11,83 @@ import Loading from "../components/common/Loading";
 
 import Error from "../components/common/Error";
 
+const PAGE_SIZE = 9;
+
 function Menu() {
-  const [search, setSearch] =
-    useState("");
+  const [search, setSearch] = useState("");
 
-  const [
-    selectedCategory,
-    setSelectedCategory,
-  ] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const [sortBy, setSortBy] =
-    useState("");
+  const [sortBy, setSortBy] = useState("");
 
+  const [page, setPage] = useState(1);
 
-  const [foods, setFoods] =
-  useState([]);
+  const [foods, setFoods] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-
-  const fetchFoods =
-    async () => {
-
+    const fetchFoods = async () => {
       try {
-
         setLoading(true);
 
-        const data =
-          await getAllFoods();
+        const data = await getAllFoods();
 
         setFoods(data);
-
       } catch (err) {
-
         setError(
-          err.response?.data
-            ?.message ||
-            "Failed to fetch foods"
+          err.response?.data?.message || "Failed to fetch foods"
         );
-
       } finally {
-
         setLoading(false);
-
       }
     };
 
-  fetchFoods();
+    fetchFoods();
+  }, []);
 
-}, []);
+  // Reset back to page 1 whenever the filters change, so a user isn't
+  // stranded on a now-empty page 3 after narrowing the results.
+  useEffect(() => {
+    setPage(1);
+  }, [search, selectedCategory, sortBy]);
 
+  const categories = useMemo(() => {
+    const unique = new Set(foods.map((f) => f.category).filter(Boolean));
 
-  let filteredFoods =
-  foods.filter((food) => {
+    return Array.from(unique).sort();
+  }, [foods]);
 
-  const matchesSearch =
-    food.name
+  let filteredFoods = foods.filter((food) => {
+    const matchesSearch = food.name
       .toLowerCase()
-      .includes(
-        search.toLowerCase()
-      );
+      .includes(search.toLowerCase());
 
-  const matchesCategory =
-    selectedCategory === "All"
-      ? true
-      : food.category ===
-        selectedCategory;
+    const matchesCategory =
+      selectedCategory === "All" ? true : food.category === selectedCategory;
 
-  return (
-    matchesSearch &&
-    matchesCategory
-  );
-});
+    return matchesSearch && matchesCategory;
+  });
 
   if (sortBy === "low") {
-    filteredFoods.sort(
-      (a, b) => a.price - b.price
-    );
+    filteredFoods = [...filteredFoods].sort((a, b) => a.price - b.price);
   }
 
   if (sortBy === "high") {
-    filteredFoods.sort(
-      (a, b) => b.price - a.price
-    );
+    filteredFoods = [...filteredFoods].sort((a, b) => b.price - a.price);
   }
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredFoods.length / PAGE_SIZE)
+  );
+
+  const paginatedFoods = filteredFoods.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE
+  );
 
   if (loading) {
     return <Loading />;
@@ -124,56 +112,72 @@ function Menu() {
 
           <div className="grid lg:grid-cols-3 gap-4 mb-8">
 
-            <SearchBar
-              search={search}
-              setSearch={setSearch}
-            />
+            <SearchBar search={search} setSearch={setSearch} />
 
             <select
               value={sortBy}
-              onChange={(e) =>
-                setSortBy(
-                  e.target.value
-                )
-              }
+              onChange={(e) => setSortBy(e.target.value)}
               className="
               border
               p-3
               rounded-xl
               "
             >
-              <option value="">
-                Sort
-              </option>
+              <option value="">Sort</option>
 
-              <option value="low">
-                Price Low to High
-              </option>
+              <option value="low">Price Low to High</option>
 
-              <option value="high">
-                Price High to Low
-              </option>
+              <option value="high">Price High to Low</option>
 
             </select>
 
           </div>
 
           <CategoryFilter
-            selectedCategory={
-              selectedCategory
-            }
-            setSelectedCategory={
-              setSelectedCategory
-            }
+            categories={categories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
           />
 
           <div className="mt-10">
 
-            <FoodGrid
-              foods={filteredFoods}
-            />
+            <FoodGrid foods={paginatedFoods} />
 
           </div>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-10">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-lg border disabled:opacity-40"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPage(p)}
+                    className={`px-4 py-2 rounded-lg border ${
+                      p === page ? "bg-amber-500 text-white" : ""
+                    }`}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="px-4 py-2 rounded-lg border disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          )}
 
         </div>
 

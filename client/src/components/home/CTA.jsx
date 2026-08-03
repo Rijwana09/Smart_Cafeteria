@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function CTA() {
+  const navigate = useNavigate();
+
   return (
     <section className="py-20 bg-gray-900 text-white">
 
@@ -8,7 +12,10 @@ function CTA() {
           Ready To Order Your Favorite Meal?
         </h2>
 
-        <button className="mt-8 bg-amber-500 px-8 py-3 rounded-xl">
+        <button
+          onClick={() => navigate("/menu")}
+          className="mt-8 bg-amber-500 px-8 py-3 rounded-xl hover:bg-amber-600"
+        >
           Start Ordering
         </button>
       </div>

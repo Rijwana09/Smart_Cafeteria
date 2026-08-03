@@ -49,9 +49,9 @@ function OrderDetailsModal({
         <hr className="my-4" />
 
         {order.orderItems.map(
-          (item) => (
+          (item, index) => (
             <div
-              key={item.food}
+              key={item.food?._id || item.food || index}
               className="flex justify-between py-2"
             >
               <span>

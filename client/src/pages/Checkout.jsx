@@ -52,7 +52,7 @@ function Checkout() {
     if (
       cartItems.length === 0
     ) {
-      alert("Cart is empty");
+      toast.error("Your cart is empty");
       return;
     }
 
@@ -87,12 +87,10 @@ function Checkout() {
         "/order-success"
       );
     } catch (error) {
-      // alert(
-      //   error.response?.data
-      //     ?.message ||
-      //     "Failed to place order"
-      // );
-      toast.error( "Failed to place order")
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to place order"
+      );
     } finally {
       setLoading(false);
     }

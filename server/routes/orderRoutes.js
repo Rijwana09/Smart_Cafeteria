@@ -6,6 +6,7 @@ const {
   createOrder,
   getMyOrders,
   getOrderById,
+  cancelOrder,
 } = require(
   "../controllers/orderController"
 );
@@ -26,6 +27,12 @@ router.get(
   "/my-orders",
   protect,
   getMyOrders
+);
+
+router.patch(
+  "/:id/cancel",
+  protect,
+  cancelOrder
 );
 
 router.get(

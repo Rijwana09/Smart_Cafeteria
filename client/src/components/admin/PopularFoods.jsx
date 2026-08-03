@@ -1,19 +1,32 @@
-function PopularFoods() {
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useAuth } from "../../context/AuthContext";
+import { getPopularFoods } from "../../services/adminService";
 
-  const foods = [
-    {
-      name: "Chicken Burger",
-      orders: 220,
-    },
-    {
-      name: "Veg Pizza",
-      orders: 190,
-    },
-    {
-      name: "Chicken Biryani",
-      orders: 165,
-    },
-  ];
+function PopularFoods() {
+  const { user } = useAuth();
+
+  const [foods, setFoods] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPopular = async () => {
+      try {
+        const data = await getPopularFoods(user.token);
+
+        setFoods(data);
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message || "Failed to load popular foods"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPopular();
+  }, [user.token]);
 
   return (
     <div
@@ -34,20 +47,26 @@ function PopularFoods() {
         Popular Foods
       </h2>
 
-      {foods.map((food) => (
-        <div
-          key={food.name}
-          className="
-          flex
-          justify-between
-          py-3
-          border-b
-          "
-        >
-          <span>{food.name}</span>
-          <span>{food.orders}</span>
-        </div>
-      ))}
+      {loading ? (
+        <p className="text-gray-500">Loading...</p>
+      ) : foods.length === 0 ? (
+        <p className="text-gray-500">No orders yet.</p>
+      ) : (
+        foods.map((food) => (
+          <div
+            key={food.name}
+            className="
+            flex
+            justify-between
+            py-3
+            border-b
+            "
+          >
+            <span>{food.name}</span>
+            <span>{food.orders}</span>
+          </div>
+        ))
+      )}
     </div>
   );
 }

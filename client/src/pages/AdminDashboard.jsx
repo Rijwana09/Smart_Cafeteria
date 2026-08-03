@@ -4,6 +4,7 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import DashboardStats from "../components/admin/DashboardStats";
 import RecentOrders from "../components/admin/RecentOrders";
 import PopularFoods from "../components/admin/PopularFoods";
+import RevenueChart from "../components/admin/RevenueChart";
 import UserTable from "../components/admin/UserTable";
 import InventoryTable from "../components/admin/InventoryTable";
 
@@ -40,6 +41,10 @@ function AdminDashboard() {
 
           <RecentOrders />
 
+          <div id="reports">
+            <RevenueChart />
+          </div>
+
           <div
             className="
             grid
@@ -51,7 +56,9 @@ function AdminDashboard() {
             <InventoryTable />
           </div>
 
-          <UserTable />
+          <div id="users">
+            <UserTable />
+          </div>
         </motion.div>
       </div>
     </div>

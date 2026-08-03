@@ -1,4 +1,5 @@
 import { useCart } from "../../context/CartContext";
+import { resolveImageUrl } from "../../utils/imageUrl";
 
 function CartItem({ item }) {
 
@@ -22,7 +23,7 @@ function CartItem({ item }) {
       "
     >
       <img
-        src={item.image}
+        src={resolveImageUrl(item.image)}
         alt={item.name}
         className="
         w-full
@@ -47,7 +48,7 @@ function CartItem({ item }) {
 
           <button
             onClick={() =>
-              decreaseQuantity(item.id)
+              decreaseQuantity(item._id)
             }
             className="
             px-3
@@ -65,7 +66,7 @@ function CartItem({ item }) {
 
           <button
             onClick={() =>
-              increaseQuantity(item.id)
+              increaseQuantity(item._id)
             }
             className="
             px-3
@@ -84,7 +85,7 @@ function CartItem({ item }) {
 
         <button
           onClick={() =>
-            removeItem(item.id)
+            removeItem(item._id)
           }
           className="
           bg-red-500

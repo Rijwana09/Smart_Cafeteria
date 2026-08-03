@@ -18,7 +18,7 @@ function FoodGrid({ foods }) {
     >
       {foods.map((food) => (
         <FoodCard
-          key={food.id}
+          key={food._id}
           food={food}
         />
       ))}
